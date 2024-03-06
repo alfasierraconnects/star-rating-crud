@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rating App</title>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>FEEDBACK SYSTEM</h1>
+    <form id="ratingDisplay">
+      <label>⭐</label>
+      <label class="displayStar">0</label>
+      <label> ⭐⭐</label>
+      <label class="displayStar">0</label>
+      <label>⭐⭐⭐</label>
+      <label class="displayStar">0</label>
+      <label>⭐⭐⭐⭐</label>
+      <label class="displayStar">0</label>
+      <label>⭐⭐⭐⭐⭐</label>
+      <label class="displayStar">0</label>
+    </form>
+    <form id="data">
+      <label>Enter Your Name:</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        placeholder="Firstname Lastname"
+      />
+      <label>Select Rating:</label>
+      <select id="rating">
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    <ul id="allRatings"></ul>
+  </body>
+  <script src="index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"></script>
+</html>
