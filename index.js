@@ -21,7 +21,6 @@ editButton.setAttribute("id", "editbtn");
 editButton.textContent = "Edit";
 
 //functions-------------------------------------------------------------------------------------------------------------------------------
-submitButton.addEventListener("click", submitLi);
 
 //pre-fetched data------------------------------------------------------------------------------
 window.addEventListener("DOMContentLoaded", () => {
@@ -31,6 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
       console.log(result);
       for (let i = 0; i < result.data.length; i++) {
         displayRating(result.data[i]);
+        increamentStar(result.data[i]);
       }
       console.log(starArray);
     })
@@ -40,6 +40,8 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 //submit funtionality----------------------------------------------------------------------------
+submitButton.addEventListener("click", submitLi);
+
 function submitLi(event) {
   event.preventDefault();
   let user = personName.value.trim();
@@ -65,6 +67,7 @@ function createRating(obj) {
     .then((result) => {
       console.log(result);
       displayRating(result.data);
+      increamentStar(result.data);
       personName.value = "";
       rating.value = "1";
     })
@@ -86,10 +89,6 @@ function displayRating(obj) {
   li.appendChild(editbtn);
 
   ratingList.appendChild(li);
-
-  const ratingIndex = obj.Rating - 1;
-  starArray[ratingIndex] = String(Number(starArray[ratingIndex]) + 1);
-  displayStarElements[ratingIndex].textContent = starArray[ratingIndex];
 }
 
 //delete li------------------------------------------------------------------------------------------------
@@ -101,6 +100,7 @@ function deleteLi(obj, li) {
     .then((result) => {
       console.log(result);
       ratingList.removeChild(li);
+      decrementStar(obj);
       alert("deleted");
     })
     .catch((err) => {
@@ -114,21 +114,30 @@ function editLi(obj, li) {
   let rate = rating.value;
 
   if (user !== "") {
-    const updateobj = {
+    const updatedObj = {
       Name: user,
       Rating: rate,
     };
-    console.log(updateobj);
+    console.log(updatedObj);
 
     axios
       .put(
         `https://crudcrud.com/api/9ccc742a0bef465c98da05cddb6ec2c0/star/${obj._id}`,
-        updateobj
+        updatedObj
       )
       .then((result) => {
         console.log(result);
         ratingList.removeChild(li);
-        displayRating(result.data);
+        axios
+          .get(
+            `https://crudcrud.com/api/9ccc742a0bef465c98da05cddb6ec2c0/star/${obj._id}`
+          )
+          .then((result) => {
+            displayRating(result.data);
+          })
+          .catch((err) => console.log(err));
+        decrementStar(obj);
+        increamentStar(updatedObj);
         alert("Rating updated");
       })
       .catch((err) => {
@@ -137,4 +146,18 @@ function editLi(obj, li) {
   } else {
     alert("fill the name and select rating to update");
   }
+}
+
+//increament star-----------------------------------------------------------------------------------------------
+function increamentStar(obj) {
+  const ratingIndex = obj.Rating - 1;
+  starArray[ratingIndex] = String(Number(starArray[ratingIndex]) + 1);
+  displayStarElements[ratingIndex].textContent = starArray[ratingIndex];
+}
+
+//decrement star-----------------------------------------------------------------------------------------------
+function decrementStar(obj) {
+  const ratingIndex = obj.Rating - 1;
+  starArray[ratingIndex] = String(Number(starArray[ratingIndex]) - 1);
+  displayStarElements[ratingIndex].textContent = starArray[ratingIndex];
 }
